@@ -32,7 +32,7 @@ spec:
         - name: SPRING_DATASOURCE_USERNAME
           value: newuser
         image: bookstore-springboot-spring-app:latest
-        imagePullPolicy: ""
+        imagePullPolicy: Never
         name: spring-app-container
         ports:
         - containerPort: 8080
