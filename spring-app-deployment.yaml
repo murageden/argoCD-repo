@@ -31,7 +31,7 @@ spec:
           value: jdbc:postgresql://postgres:5432/bookstore
         - name: SPRING_DATASOURCE_USERNAME
           value: newuser
-        image: spring-app
+        image: bookstore-springboot-spring-app:latest
         imagePullPolicy: ""
         name: spring-app-container
         ports:
