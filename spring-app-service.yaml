@@ -2,18 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   annotations:
-    kompose.cmd: /snap/kompose/19/kompose-linux-amd64 convert
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
+    application: spring-app
   labels:
-    io.kompose.service: spring-app
+    app: spring-app
   name: spring-app
 spec:
   ports:
-  - name: "8080"
-    port: 8080
-    targetPort: 8080
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
   selector:
-    io.kompose.service: spring-app
+    app: spring-app
 status:
   loadBalancer: {}

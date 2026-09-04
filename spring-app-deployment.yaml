@@ -2,41 +2,68 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: /snap/kompose/19/kompose-linux-amd64 convert
-    kompose.version: 1.21.0 (992df58d8)
-  creationTimestamp: null
+    app: spring-app
   labels:
-    io.kompose.service: spring-app
+    app: spring-app
   name: spring-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: spring-app
+      app: spring-app
   strategy: {}
   template:
     metadata:
       annotations:
-        kompose.cmd: /snap/kompose/19/kompose-linux-amd64 convert
-        kompose.version: 1.21.0 (992df58d8)
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/"
+        app: spring-app
       creationTimestamp: null
       labels:
-        io.kompose.service: spring-app
+        app: spring-app
     spec:
       containers:
-      - env:
-        - name: SPRING_DATASOURCE_PASSWORD
-          value: password
-        - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://postgres:5432/bookstore
-        - name: SPRING_DATASOURCE_USERNAME
-          value: newuser
-        image: bookstore-springboot-spring-app:latest
-        imagePullPolicy: Never
-        name: spring-app-container
-        ports:
-        - containerPort: 8080
-        resources: {}
+        - env:
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: password
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/bookstore
+            - name: SPRING_DATASOURCE_USERNAME
+              value: newuser
+          image: bookstore-springboot-spring-app:latest
+          imagePullPolicy: Never
+          name: spring-app-container
+          ports:
+            - containerPort: 8080
+              name: http
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 200m
+              memory: 64Mi
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8080
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
       restartPolicy: Always
       serviceAccountName: ""
       volumes: null
