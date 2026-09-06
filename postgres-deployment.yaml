@@ -41,11 +41,11 @@ spec:
             - containerPort: 5432
           resources:
             limits:
-              cpu: 200m
-              memory: 64Mi
+              cpu: 100m
+              memory: 128Mi
             requests:
-              cpu: 50m
-              memory: 32Mi
+              cpu: 500m
+              memory: 512Mi
           volumeMounts:
             - mountPath: /var/lib/postgresql
               name: postgres-data
