@@ -11,7 +11,6 @@ spec:
   selector:
     matchLabels:
       app: react-app
-  strategy: {}
   template:
     metadata:
       annotations:
@@ -21,39 +20,38 @@ spec:
         app: react-app
     spec:
       containers:
-        image: bookstore-react-react-app:latest
-        imagePullPolicy: Never
-        name: react-app-container
-        ports:
-          - containerPort: 8080
-            name: http
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 514Mi
-        startupProbe:
-          httpGet:
-            path: /
-            port: 8080
-          failureThreshold: 30
-          periodSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 2
-          periodSeconds: 5
-          failureThreshold: 3
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          failureThreshold: 3
+        - image: bookstore-react-react-app:latest
+          imagePullPolicy: Never
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          name: react-app-container
+          ports:
+            - containerPort: 8080
+              name: http
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            limits:
+              cpu: 500m
+              memory: 514Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /
+              port: 8080
+            periodSeconds: 5
       restartPolicy: Always
-      serviceAccountName: ""
       volumes: null
