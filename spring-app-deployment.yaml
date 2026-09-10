@@ -17,7 +17,7 @@ spec:
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
-        prometheus.io/path: "/"
+        prometheus.io/path: "/api/v1/auth/"
         app: spring-app
       creationTimestamp: null
       labels:
@@ -46,20 +46,20 @@ spec:
               memory: 514Mi
           startupProbe:
             httpGet:
-              path: /
+              path: /api/v1/auth/
               port: 8080
             failureThreshold: 30
             periodSeconds: 5
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/v1/auth/
               port: 8080
             initialDelaySeconds: 2
             periodSeconds: 5
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/v1/auth/
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
