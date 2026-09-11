@@ -55,20 +55,20 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 15"]
           startupProbe:
             httpGet:
-              path: /
+              path: /api/v1/auth/
               port: 8080
             failureThreshold: 30
             periodSeconds: 5
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/v1/auth/
               port: 8080
             initialDelaySeconds: 2
             periodSeconds: 5
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/v1/auth/
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
