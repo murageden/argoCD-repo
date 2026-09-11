@@ -7,10 +7,15 @@ metadata:
     app: react-app
   name: react-app
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: react-app
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       annotations:
@@ -19,13 +24,14 @@ spec:
       labels:
         app: react-app
     spec:
+      terminationGracePeriodSeconds: 45
       containers:
         - image: bookstore-react-react-app:latest
           imagePullPolicy: Never
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /
+              path: /login
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
@@ -36,7 +42,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /
+              path: /login
               port: 8080
             initialDelaySeconds: 2
             periodSeconds: 5
@@ -47,10 +53,14 @@ spec:
             requests:
               cpu: 100m
               memory: 256Mi
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 15"]
           startupProbe:
             failureThreshold: 30
             httpGet:
-              path: /
+              path: /login
               port: 8080
             periodSeconds: 5
       restartPolicy: Always
