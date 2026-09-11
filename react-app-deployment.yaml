@@ -31,7 +31,7 @@ spec:
           livenessProbe:
             failureThreshold: 3
             httpGet:
-              path: /login
+              path: /
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
@@ -42,7 +42,7 @@ spec:
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /login
+              path: /
               port: 8080
             initialDelaySeconds: 2
             periodSeconds: 5
@@ -60,7 +60,7 @@ spec:
           startupProbe:
             failureThreshold: 30
             httpGet:
-              path: /login
+              path: /
               port: 8080
             periodSeconds: 5
       restartPolicy: Always

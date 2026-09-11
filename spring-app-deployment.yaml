@@ -33,7 +33,7 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               value: password
             - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres:5432/bookstore
+              value: jdbc:postgresql://postgres.applications.svc.cluster.local:5432/bookstore?sslmode=disable
             - name: SPRING_DATASOURCE_USERNAME
               value: newuser
           image: bookstore-springboot-spring-app:latest
@@ -55,20 +55,20 @@ spec:
                 command: ["/bin/sh", "-c", "sleep 15"]
           startupProbe:
             httpGet:
-              path: /api/v1/auth/
+              path: /
               port: 8080
             failureThreshold: 30
             periodSeconds: 5
           readinessProbe:
             httpGet:
-              path: /api/v1/auth/
+              path: /
               port: 8080
             initialDelaySeconds: 2
             periodSeconds: 5
             failureThreshold: 3
           livenessProbe:
             httpGet:
-              path: /api/v1/auth/
+              path: /
               port: 8080
             initialDelaySeconds: 5
             periodSeconds: 10
